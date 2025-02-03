@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.SecApp" parent="android:Theme.Material.Light.NoActionBar" />
+    <!-- Usando Theme.AppCompat.Light.NoActionBar -->
+    <style name="Theme.SecApp" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Personalizações do tema podem ser feitas aqui -->
+    </style>
 </resources>
