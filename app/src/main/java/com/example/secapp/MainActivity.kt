@@ -1,48 +1,62 @@
 package com.example.secapp
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
 import androidx.biometric.BiometricPrompt
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat
-import com.example.secapp.ui.theme.SecAppTheme
+import com.example.secapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        // Inicia a LoginActivity automaticamente quando o app é aberto
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish() // Finaliza a MainActivity para não voltar a ela ao pressionar o botão voltar
+
+        val helloTextView: TextView = findViewById(R.id.helloTextView)
+        helloTextView.text = "Hello Android!" // Atualizando o texto diretamente
 
         val biometricManager = BiometricManager.from(this)
 
-        when(biometricManager.canAuthenticate(BIOMETRIC_STRONG)){
+        when (biometricManager.canAuthenticate(BIOMETRIC_STRONG)) {
             BiometricManager.BIOMETRIC_SUCCESS -> {
                 showBiometricPrompt()
             }
-
             BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> {
-                showToast("No hardware boometrico")
+                showToast("No hardware biométrico")
             }
-
             BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> {
-                showToast("Hardware não disponivel")
+                showToast("Hardware não disponível")
             }
-
             BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> {
                 showToast("Não há biometria registrada")
             }
+        }
+
+        val loginButton: Button = findViewById(R.id.loginButton)
+        loginButton.setOnClickListener {
+            showToast("Login clicado!")
+        }
+
+        val registerButton: Button = findViewById(R.id.registerButton)
+        registerButton.setOnClickListener {
+            showToast("Cadastro clicado!")
         }
     }
 
@@ -76,24 +90,7 @@ class MainActivity : AppCompatActivity() {
         biometricPrompt.authenticate(promptInfo)
     }
 
-
-    private fun showToast(mensagem: String){
+    private fun showToast(mensagem: String) {
         Toast.makeText(this, mensagem, Toast.LENGTH_SHORT).show()
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    SecAppTheme {
-        Greeting("Android")
     }
 }

@@ -1,15 +1,37 @@
+# Ignore Android Studio specific files
+.idea/
 *.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
+*.log
+*.bak
+
+# Ignore Gradle files
+.gradle/
+build/
+*/build/
+
+# Ignore local properties files
 local.properties
+
+# Ignore generated Android files
+/captures/
+/.externalNativeBuild/
+/.cxx/
+
+# Ignore system-specific files (macOS, Linux, Windows)
+.DS_Store
+Thumbs.db
+
+# Ignore Kotlin generated files
+*.kotlin_metadata
+
+# Ignore Gradle wrapper
+.gradle/
+
+# Ignore caches or other build-related files
+caches/
+daemon/
+jdks/
+native/
+
+# Ignore libraries and versions related to Gradle
+gradle/libs.versions.toml
