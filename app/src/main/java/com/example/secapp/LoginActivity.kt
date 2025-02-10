@@ -2,6 +2,7 @@ package com.example.secapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.secapp.databinding.ActivityLoginBinding
@@ -9,16 +10,23 @@ import com.example.secapp.databinding.ActivityLoginBinding
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
-
-    private val registeredEmail = "user@example.com"
-    private val registeredPassword = "password123"
+    private lateinit var dbHelper: DbHelper
+    private lateinit var sessionManager: SessionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        dbHelper = DbHelper(this)
+        sessionManager = SessionManager(this)
 
+        if (sessionManager.isLoggedIn()) {
+            val intent = Intent(this, ProfileActivity::class.java)
+            startActivity(intent)
+            finish()
+            return
+        }
 
         binding.loginButton.setOnClickListener {
             val email = binding.emailEditText.text.toString()
@@ -27,12 +35,13 @@ class LoginActivity : AppCompatActivity() {
             if (email.isEmpty() || password.isEmpty()) {
 
                 Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show()
-            } else if (email == registeredEmail && password == registeredPassword) {
+            } else if (dbHelper.loginUser(email, password)) {
 
                 Toast.makeText(this, "Login realizado com sucesso!", Toast.LENGTH_SHORT).show()
-
-
-                val intent = Intent(this, MainActivity::class.java)
+                sessionManager.saveSession(email)
+                val intent = Intent(this, ProfileActivity::class.java)
+                intent.putExtra("email", email)
+                intent.putExtra("password", password)
                 startActivity(intent)
                 finish()
             } else {

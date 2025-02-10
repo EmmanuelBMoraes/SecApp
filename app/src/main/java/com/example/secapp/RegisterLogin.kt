@@ -6,12 +6,16 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import com.example.secapp.DbHelper
 
 class RegisterLogin : Activity() {
+    private lateinit var dbHelper: DbHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register_login)
+
+        dbHelper = DbHelper(this)
 
         val emailEditText: EditText = findViewById(R.id.emailEditText)
         val passwordEditText: EditText = findViewById(R.id.passwordEditText)
@@ -37,6 +41,7 @@ class RegisterLogin : Activity() {
                 if (password != confirmPassword) {
                     Toast.makeText(this, "As senhas não coincidem", Toast.LENGTH_SHORT).show()
                 } else {
+                    dbHelper.registerUser(email, password)
                     Toast.makeText(this, "Cadastro realizado com sucesso", Toast.LENGTH_SHORT).show()
                     val intent = Intent(this, LoginActivity::class.java)
                     startActivity(intent)
