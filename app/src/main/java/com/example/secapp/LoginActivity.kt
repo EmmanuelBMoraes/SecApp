@@ -2,12 +2,11 @@ package com.example.secapp
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.secapp.databinding.ActivityLoginBinding
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity(), BiometricHelper.BiometricCallback {
 
     private lateinit var binding: ActivityLoginBinding
     private lateinit var dbHelper: DbHelper
@@ -20,12 +19,14 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
         dbHelper = DbHelper(this)
         sessionManager = SessionManager(this)
+        val biometricHelper = BiometricHelper(this, this)
 
         if (sessionManager.isLoggedIn()) {
-            val intent = Intent(this, ProfileActivity::class.java)
-            startActivity(intent)
-            finish()
-            return
+            if (biometricHelper.isBiometricAvailable()) {
+                biometricHelper.showBiometricPrompt(this)
+            } else {
+                showToast("Biometria não disponível")
+            }
         }
 
         binding.loginButton.setOnClickListener {
@@ -55,5 +56,25 @@ class LoginActivity : AppCompatActivity() {
             val intent = Intent(this, RegisterLogin::class.java)
             startActivity(intent)
         }
+    }
+
+    fun showToast(mensagem: String) {
+        Toast.makeText(this, mensagem, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onSuccess() {
+        showToast("Autenticado com sucesso!")
+        val intent = Intent(this, ProfileActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    override fun onFailure() {
+        showToast("Não autorizado")
+        return
+    }
+
+    override fun onError(errorMessage: String) {
+        showToast("Erro inesperado")
     }
 }
