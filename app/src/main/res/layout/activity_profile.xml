@@ -24,12 +24,16 @@
 
     </FrameLayout>
 
+
     <Button
         android:id="@+id/btnChooseImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Escolher Imagem"
-        android:layout_marginBottom="20dp"/>
+        android:backgroundTint="#FFC1CC"
+        android:textColor="#000000"
+        android:padding="14dp"
+        android:textSize="16sp"/>
 
     <TextView
         android:id="@+id/usernameText"
@@ -44,6 +48,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Logout"
-        android:layout_marginTop="10dp"/>
+        android:backgroundTint="#FFC1CC"
+        android:textColor="#000000"
+        android:padding="14dp"
+        android:textSize="16sp"/>
 </LinearLayout>
 
