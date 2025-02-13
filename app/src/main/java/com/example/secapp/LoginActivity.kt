@@ -25,7 +25,7 @@ class LoginActivity : AppCompatActivity(), BiometricHelper.BiometricCallback {
             if (biometricHelper.isBiometricAvailable()) {
                 biometricHelper.showBiometricPrompt(this)
             } else {
-                showToast("Biometria não disponível")
+                showToast("Biométria não disponível")
             }
         }
 
@@ -76,5 +76,6 @@ class LoginActivity : AppCompatActivity(), BiometricHelper.BiometricCallback {
 
     override fun onError(errorMessage: String) {
         showToast("Erro inesperado")
+        finish()
     }
 }
